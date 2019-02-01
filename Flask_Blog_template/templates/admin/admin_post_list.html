@@ -1,0 +1,140 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+  {{super()}}
+  <style type="text/css">
+    .dropdown-toggle{
+      border: 1px solid #fa781b !important;
+      color: #fa781b !important;
+    }
+    .dropdown-toggle:hover{
+      background-color: #fa781b;
+      border-color: #fa781b;
+      color: #fff !important;
+    }
+  </style>
+{% endblock head %}  
+
+{% block admin_content %}
+<section class="blog-area" style="padding: 50px 0px">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12">
+        <div class="blog-posts">
+          
+            <div class="single-post">
+              <div>
+                <h3  style="float: left;" class="title"><b class="light-color">All Stories</b></h3>
+                <div  style="float: right;">
+                  <input type="text" class="search-input" name="q" placeholder="Title / Tag" id="search_query">
+                  <button type="button" class="search-btn" onclick="search()" data-value="reject">Search</button>
+                </div>
+              </div>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Tags</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Views</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for post in data %}
+                    <tr scope="row">
+                      <td> {{ loop.index }} </td>
+                      <td><a href="/post/{{ post.url }}"> {{ post.title }} </a></td>
+                      <td> {{ post.created_at.strftime('%d/%m/%Y') }} </td>
+                      <td> {% for tag in post.tags %} {{tag}}, {% endfor %}</td>
+                      <td> {%for category in post.category %}{{ category.name }}, {%endfor%} </a></td>
+                      <td> {{post.views}} </td>
+                      <td>
+                        <div class="dropdown">
+                          <button class="primary-btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% if post.featured %}
+                              <a class="dropdown-item" cl href="/remove_feature_blog/{{ post.id }}">Remove Featured</a>
+                            {% else %}
+                              <a class="dropdown-item"  href="/feature_blog/{{ post.id }}"> Feature This Blog</a>
+                            {% endif %}
+                            {% if post.publish %}
+                              <a class="dropdown-item"  href="/remove_publish_blog/{{ post.id }}">Remove Publish</a> 
+                            {% else %}
+                              <a class="dropdown-item"  href="/publish_blog/{{ post.id }}"> Publish This Blog</a>
+                            {% endif %}  
+                            <a class="dropdown-item" href="/edit_post/{{ post.id }}">Edit This Post</a>
+                            {% if current_user.role_name == "admin" %}
+                              <a class="dropdown-item"  onclick="delete_post('{{ post.id }}')">Delete This Post</a>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {{ pagination.links }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>     
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    function delete_post(i){
+      if (confirm('Are you sure you want to Delete the Blog from the database?')){
+        $.post("/delete_post",
+        {
+          pid: i
+        },
+        function(data, status){
+          alert(data);
+          window.location.reload();
+        });
+      }
+    }
+
+    var search_text = '{% if query.q %}{{ query.q }}{% else %}{% endif %}'; // blank, any text
+
+    set_defaults();
+
+    function set_defaults(){
+      document.getElementById('search_query').value = search_text;
+    }
+
+    function update_query(){
+      console.log('Query Updated');
+      location.href = "/admin_post_list?";
+    }
+
+    let typingTimer; //timer identifier
+    let doneTypingInterval = 500;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#search_query').keyup(function(){
+      let query = $('#search_query').val();
+      clearTimeout(typingTimer);
+      if (query.length > 4) {
+          typingTimer = setTimeout(search, doneTypingInterval);
+      } else if(query.length === 0){
+        $('#user-search-dropdown').css('display', 'none');
+      }
+    });
+
+    function search(){
+      let query = $('#search_query').val();
+      location.href = "/admin_post_list?q=" +query;
+    }
+  </script>
+{% endblock %}

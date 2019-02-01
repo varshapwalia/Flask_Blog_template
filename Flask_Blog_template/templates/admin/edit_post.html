@@ -1,0 +1,118 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .achievement_tags{
+      padding: 3px 15px 3px 2px;
+      background-color: #ef6b2a;
+      color: #fff;
+    }
+
+    .dropdown-menu .inner .show li{
+      width: 100%;
+      background: #eee;
+    }
+  </style>
+{% endblock %}
+
+{% block admin_content %}
+  <section class="blog-area">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+            <div class="leave-comment-area">
+
+              <h4 class="title"><b class="light-color">Edit Post</b></h4>
+              <div class="leave-comment">
+                <div class="row">
+                  <div class="col-sm-9">
+                    <input class="name-input" value="{{data.title}}" style="font-size: 32px" type="text" id="title" placeholder="Title" name="title" required autofocus onkeyup="createPostSlug()" maxlength="150">
+                  </div>
+                  <div class="col-sm-9">
+                    <input class="name-input" value="{{data.url}}" type="text" id="blog_url"  placeholder="Your Post URL" name="blog_url" >
+                  </div>
+                  <div class="col-sm-9">
+                    <input class="name-input" value="{{data.auther}}" type="text" id="author" placeholder="Author's Name" name="author">
+                  </div>
+                  <div class="col-sm-9">
+                    <input class="email-input" value="{{data.image_url}}" type="text" id="image"  placeholder="Title Picture Url" name="blog_image">
+                  </div>
+                  <div class="col-sm-9">
+                    <select id="categories" name='categories' class="form-control selectpicker" multiple data-live-search="true" required>
+                    </select>
+                    <div id="categories-tags"></div>
+                  </div>
+                  <div class="col-sm-9">
+                    <textarea class="message-input" rows="6" placeholder="Post Summary" name="summary" id="summary" required >{{data.summary}}</textarea>
+                  </div>
+                  <div class="col-sm-9">
+                    <textarea id="summernote" class="form-control" name="body" placeholder="Write Your Post" required>{{data.body}}</textarea>
+                  </div>
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <input type="text" class="form-control" value="{% for tag in data.tags %} {{tag}}, {% endfor %}"  data-role="tagsinput" name="tags" id="tags" placeholder="Add tags" />
+                  </div>
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <input type="text" class="form-control" value="{% for award in data.awards %} {{award}}, {% endfor %}" data-role="tagsinput" name="awards" id="awards" placeholder="Add Achievements" />
+                  </div>  
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <input type="text" class="form-control" value="{% for fact in data.facts %} {{fact}}, {% endfor %}" data-role="tagsinput" name="facts" id="facts" placeholder="Interesting Facts" />
+                  </div>  
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <button class="primary-btn" onclick="finish_post()"><b>Save</b></button>
+                  </div>
+                </div>
+              </div> 
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>            
+{% endblock admin_content %}
+
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function(){
+      $('#summernote').summernote({
+        height: 300               // set editor height
+      });
+
+      var tags_property = { confirmKeys: [13, 44], trimValue: true, cancelConfirmKeysOnEmpty: true };
+      $('#tags').tagsinput(tags_property);
+      $('#awards').tagsinput(tags_property);
+      $('#facts').tagsinput(tags_property);
+
+    });
+
+    function createPostSlug(){
+      let slug = $('#title').val().replace(/[^\sA-Za-z0-9]/gi, '').toLowerCase().trim().replace(/ /g, '-');
+      $('#blog_url').val(slug);
+    }
+
+    function finish_post(){
+      $.post("/add_post",{
+        title: $('#title').val().trim(),
+        blog_url: $('#blog_url').val().trim(),
+        image: $('#image').val(),
+        summary: $('#summary').val().trim(),
+        categories: $('#categories').val(),
+        author: $('#author').val(),
+        body: $('#summernote').val(),
+        tags: $('#tags').val(),
+        awards: $('#awards').val(),
+        facts: $('#facts').val()
+      },
+      function(data, status){
+        alert(data);
+        if (data == "Success"){
+          window.location = "/all_posts";
+        }
+      });
+    }
+  </script>
+{% endblock %}

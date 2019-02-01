@@ -1,0 +1,108 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+	{{ super() }}
+	  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+{% endblock %}
+
+{% block admin_content %}
+  <section class="blog-area">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+           <div class="leave-comment-area">
+
+              <h4 class="title"><b class="light-color">Add Category(Categories should be kept Unique!)</b></h4>
+              <div class="leave-comment">
+                <form action = "/add_category" method = "POST" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <input class="name-input" type="text" name="name" placeholder="Enter Category Name" required>
+                    </div>
+                    <div class="col-sm-12">
+                      <input class="email-input" type="text" name="sub_category" placeholder="Enter Sub Category Name" required>
+                    </div>
+                    <div class="col-sm-12">
+                      <button type="submit" class="primary-btn"><b>Add</b></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+         <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+            <div class="single-post">
+              <div>
+                <h3  style="float: left;" class="title"><b class="light-color">Categories List</b></h3>
+              </div>
+
+              <div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Sub Category</th>
+                      <th scope="col">Edit Category</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for category in data %}
+                      <tr scope="row">
+                        <td>{{ loop.index }}</td>
+                        <td><p id="p1{{category.id}}">{{category.name}}</p> <input class="form-control" style="display: none;" type="text" id="input1{{category.id}}" value="{{category.name}}"></td>
+                        <td><p id="p2{{category.id}}">{{ category.sub_category }}</p> <input class="form-control" style="display: none;" type="text" id="input2{{category.id}}" value="{{category.sub_category}}"></td>
+                        <td> <button class="primary-btn" id="b1{{category.id}}" onclick="edit_post('{{category.id}}')">Edit text</button> <button style="display: none;" class="secondary-btn" id="b2{{category.id}}" onclick="save_post('{{category.id}}')">Save text</button></td>
+                      </tr>
+                    {% endfor %}  
+                  </tbody>  
+                </table>  
+              </div>
+
+            </div>  
+            {{ pagination.links }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>   
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+  	function edit_post(i){
+      $("#p1"+i).hide();
+      $("#p2"+i).hide();
+      $("#b1"+i).hide();
+      $("#input1"+i).show();
+      $("#input2"+i).show();
+      $("#b2"+i).show();
+    }
+
+    function save_post(i){
+      $.post("/edit_category",
+      {
+        name: $("#input1"+i).val(),
+        sub_category: $("#input2"+i).val(),
+        cid: i
+      },
+      function(data, status){
+      $("#p1"+i).show();
+      $("#p2"+i).show();
+      $("#b1"+i).show();
+      $("#input1"+i).hide();
+      $("#input2"+i).hide();
+      $("#b2"+i).hide();
+      $("#p1"+i).html($("#input1"+i).val());
+      $("#p2"+i).html($("#input2"+i).val());
+      });
+    }
+  </script>
+{% endblock %}

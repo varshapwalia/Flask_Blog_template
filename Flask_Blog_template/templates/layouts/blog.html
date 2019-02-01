@@ -1,0 +1,173 @@
+{% extends "layouts/base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <link href="/static/css/blog.css" rel="stylesheet" >
+  <style type="text/css">
+    .feedback-form-btn-container {
+      position: fixed;
+      top: 50vh;
+      right: 0%;
+      bottom: 0%;
+      text-align:right;
+      z-index:9999;
+    }
+
+    .feedback-btn {
+      width: 30px;
+      padding: 3px 8px;
+      font-size: 14px;
+      line-height: 18px;
+      display: inline-block;
+      border-radius: 4px;
+      border: none;
+      background: #fa781b;
+      color: #FFF;
+      text-align: center;
+      transition: all 0.5s;
+      cursor: pointer;
+      float: left;
+      font-weight: 500;
+    }
+
+    .feedback-btn:hover {
+      background-color: #FFF;
+      border: solid 1px #fa781b;
+      color: #fa781b
+    }
+
+    .feedback-btn:focus{
+      color: #FFF;
+    }
+
+    .feedback-btn:active{
+      background-color: #FFF;
+      border: solid 1px #fa781b;
+      color: #fa781b
+    }
+
+    .feedback-btn:visited{
+      background-color: #FFF;
+      border: solid 1px #fa781b;
+      color: #fa781b
+    }
+
+    @media (max-width:768px) {
+      .feedbackform {
+        display:none;
+      }
+    }
+  </style>
+{% endblock %}
+
+
+{% block content %}
+  <div style="margin-top: 100px;">
+    {% block blog_content -%}
+    {%- endblock blog_content %}
+    <div class="feedback-form-btn-container">
+      <button class="feedback-btn" data-toggle="modal" data-target="#modalLoginForm"><i class="fa fa-envelope" aria-hidden="true"></i>FEEDBACK</button>
+    </div>
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100">Share Your Feedback</h4>
+            <button onclick="resetValues()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <div class="leave-comment-area">
+              <div class="leave-comment">
+                <div id="feedback-form">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <input class="name-input" type="text" name="feedback-name" placeholder="Name" id="feedback-name" required>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <input class="email-input" type="email" placeholder="Email" name="feedback-email" id="feedback-email" required>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <input class="email-input" type="text" placeholder="Mobile" name="feedback-mobile" id="feedback-mobile" maxlength="10" required>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <textarea class="message-input" rows="2" placeholder="Feedback Title" name="feedback-title" id="feedback-title" required></textarea>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <textarea class="message-input" rows="2" placeholder="Query/Details" name="feedback-details" id="feedback-details" required></textarea>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <button id="send-feedback-btn" class="primary-btn"><b>Send Feedback</b></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>    
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock content %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    let sendFeedbackBtn = $('#send-feedback-btn');
+    var emailInput;
+    var nameInput;
+    var titleInput;
+    var mobileInput;
+    var detailsInput;
+
+    function validateEmail(email) {
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+
+    function resetValues(){
+      emailInput.val("");
+      nameInput.val("");
+      titleInput.val("");
+      mobileInput.val("");
+      detailsInput.val("");
+    }
+
+    sendFeedbackBtn.click(()=>{
+      emailInput = $('#feedback-email');
+      nameInput = $('#feedback-name');
+      titleInput = $('#feedback-title');
+      mobileInput = $('#feedback-mobile');
+      detailsInput = $('#feedback-details');
+      if (!emailInput.val() || !nameInput.val() || !titleInput.val() || !mobileInput.val() || !detailsInput.val().trim()) {
+        alert("All fields are Required");
+      } else if (validateEmail(emailInput.val())) {
+        if (mobileInput.val().length !== 10 || isNaN(mobileInput.val())) {
+          alert("Please Enter a Valid Mobile Number");
+        } else{
+          sendFeedbackBtn.attr('disabled','disabled');
+          $.post("/feedback",{
+            email: emailInput.val(),
+            name: nameInput.val(),
+            title: titleInput.val(),
+            mobile: mobileInput.val(),
+            details: detailsInput.val(),
+          },
+          (data, status)=>{
+            sendFeedbackBtn.removeAttr('disabled');
+            alert(data);
+            resetValues();
+          });
+        }
+      } else {
+        alert("Please Enter a Valid Email");
+      }
+    })
+  </script>
+{% endblock scripts %}  

@@ -1,0 +1,52 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .desc{
+      margin-top:10px; 
+    }
+  </style>  
+{% endblock head %}
+
+{% block blog_content %}
+  <section class="blog-area">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-8 col-md-12">
+          <div class="blog-posts">
+
+            <div class="single-post">
+              <h3 class="title"><b class="light-color">Disclaimer</b></h3>
+              <p class="desc">This is for general information to one and all that the copyrights/proprietary material/content been posted on the website including inter-alia but not limited to text, audio, video, pictures, logos or any allied contents are the legal property of <a style="color: #6898cf" href="/">Drilers.com</a>  and are significantly sheltered under the Indian laws being their intellectual property rights. By usage or registration with the website you hereby agree to the <b>terms and conditions</b> of the website. Any unauthorized use of the content posted herein directly or indirectly by usage of any techniques to copy, alter or change in appearance of the original content or any trade name or logo or any other information of <a style="color: #6898cf" href="/">Drilers.com</a> <b>would attract penalty under the strict provisions of law which may include fine or may even lead to imprisonment</b> . Any alteration in the content and media of this site and republishing it on any other website/magazine or any other print or electronic media without prior written permission and due credits shall be strongly prosecuted and pursued to the logical end under the law. Any alteration of the content in a way that the basic content remains the same and is posted by altering the image or rearranging the content is punishable as above under the relevant provisions of law pertaining to Intellectual property rights, Information Technology act and Indian Penal Code along with any other applicable law.</p>
+
+              <p class="desc">The information been posted on the website is not for commercial use and the information so shared with the website would not be shared with a third party without any express permission from the user.</p>
+            </div>  
+
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+          <div class="sidebar-area">
+
+            <div class="sidebar-section newsletter-area" style="background-color: #10161f">
+              <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+              <form id="subscribe-form" onsubmit="return false;">
+                <input class="email-input" name="email" id="subscribe-email" type="email" placeholder="Your email here" required>
+                <button  onclick="subscribeForm()" class="primary-btn">SUBSCRIBE</button>
+              </form>
+            </div>
+
+          </div>
+        </div>  
+
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script type="text/javascript" src="/static/js/subscribe.js"></script>
+{% endblock scripts %}

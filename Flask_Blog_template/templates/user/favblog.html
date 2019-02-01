@@ -1,0 +1,39 @@
+{% extends "layouts/user.html" %}
+
+{% block user_content %}
+  <section class="blog-area" style="margin: 150px 0px">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+            <h4 class="title"><b class="light-color">User Favourite Stories</b></h4>
+            <div class="single-post">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Story Title</th>
+                    <th scope="col">Summary</th>
+                    <th scope="col">Story link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for fav in data %}
+                    <tr scope="row">
+                      <td>{{ loop.index }}</td>
+                      <td>{{ fav.blog.title }}</td>
+                      <td>{{ fav.blog.summary }}</td>
+                      <td> <a class="primary-btn" href="/post/{{ fav.blog.url }}">Open</a> </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {{ pagination.links }}
+            </div>  
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>    
+{% endblock %}

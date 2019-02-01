@@ -1,0 +1,44 @@
+{% extends "layouts/user.html" %}
+
+{% block user_content %}
+<section class="blog-area" style="padding: 100px 0px">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+						<div class="leave-comment-area">
+							<h4 class="title"><b class="light-color">Verify OTP</b></h4>
+							<div class="leave-comment">
+								<form action = "/verify_otp" method = "POST">
+									<div class="row">
+										<div class="col-sm-12">
+											<input class="email-input" type="email" id="email" placeholder="Your Email" name="email" value="{{email}}" disabled>
+										</div>
+										<div class="col-sm-12">
+											<input class="number-input" type="number" id="otp" placeholder="Please ENter your OTP" name="otp" required required>
+										</div>
+										<div class="col-sm-12">
+											<input class="subject-input" type="password" id="password" placeholder="Please put Password" name="password" required>
+										</div>
+										<div class="col-sm-12">
+											<input class="subject-input" type="password" id="confirm_password" placeholder="Please put Password" name="confirm_password" required>
+										</div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+											<button type="submit" class="primary-btn"><b>Submit</b></button>
+											<a href="/"class="secondary-btn"><b>Cancel</b></a>
+                      <div class="pull-right" style="margin-top: 25px">
+                        <p style="display: inline-block;">Didn't Recieve OTP?</p>
+                        <a style="display: inline-block;font-size: 18px;color: #ef6b2a" href="/forgot_password">Send Again</a>
+                      </div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>	
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>					
+{% endblock %}

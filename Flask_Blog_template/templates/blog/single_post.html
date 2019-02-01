@@ -1,0 +1,388 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+  {{super()}}
+  <style type="text/css">
+    .blog-social-icons a{
+      
+    }
+    .blog-social-icons a i{
+      font-size: 25px;
+    }
+
+    .show-mobile{
+      display: none;
+    }
+
+    .hide-mobile{
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .blog-area{
+        margin-top: 150px;
+      }
+
+      .hide-mobile{
+        display: none;
+      }
+
+      .show-mobile{
+        display: block;
+      }
+    } 
+  </style>
+{% endblock head %}
+
+{% block blog_content %}
+  <section class="blog-area" style="margin-bottom: 50px">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-8 col-md-12" style="overflow: hidden;">
+          <div class="blog-posts" style="overflow: hidden;">
+
+            <div class="single-post" style="background-color: #fcfcfc; padding: 20px 10px;">
+              
+              <div class="col-lg-12 col-md-12 col-sm-12 category-single-post" style="margin-left: 0px; padding-left: 0px;">
+                <h1 style="font-weight: 500; font-size: 30px;">{{ blog.title }}</h1>
+              </div>
+
+              <div style="display: block; margin-top: 20px; margin-left: 2px;">
+                <span style="color: #333; font-size: 14px; float: left;">
+                  By: <a href="/author/{{ blog.author.url }}" style="color: #ef6b2a;font-size: 15px">{{ blog.author.name }}</a> | 
+                  {{ blog.created_at.strftime('%d %B, %Y') }} | <a href="#" style="color: #ef6b2a;">{{blog.views}}</a> Views
+                </span>
+                <span class="blog-social-icons" style="float: right;"> 
+                  <a class="hover_unchange" href="#" style="margin-right: 5px; color: #ef6b2a">
+                    <i class="fa fa-share-alt"> </i>
+                  </a>
+                  <a style="color:#385596;" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.drilers.com/post/{{blog.url}}">
+                    <i class="fa fa-facebook-square"></i>
+                  </a>
+                  <a style="color: #5689C4;" href="https://twitter.com/home?status=https://www.drilers.com/post/{{blog.url}}" target="_blank">
+                    <i class="fa fa-twitter-square"></i>
+                  </a>
+                  <a style="color: black;" href="https://twitter.com/home?status=https://www.drilers.com/post/{{blog.url}}" target="_blank">
+                    <i class="fa fa-instagram"></i>
+                  </a>
+                </span>
+              </div>
+
+              <div style="margin-top: 55px;" class="image-wrapper"><img src="{{blog.image_url}}" alt="Featured Image"></div>
+              
+              <div style="margin-top: 30px;">
+                {{blog.body | safe}}
+              </div>
+              {% if blog.tags %}
+                <div class="col-md-7 col-sm-12 col-lg-7" style="margin-top: 15px; display: inline-block;">
+                  <h4 class="title">Tags:</h4>
+                  <ul class="tags" style="padding-left: 0;list-style-type: none;">
+                    {% for tag in blog.tags[:5] %}
+                      <li><a class="primary-category-btn" href="/tag_list/{{tag}}">{{tag}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% if current_user.is_authenticated %}
+                  <div class="col-md-4 pull-right" style="display: inline-block;margin-top: 35px;">
+                    {% if status %}
+                      <button data-toggle="tooltip" class="pull-right" id="remove_fav" data-placement="right" title="Remove from Favourites"><span>Unfavourite</span>
+                        <i style="color: red;font-size: 24px;margin-left: 5px" class="fa fa-heart"></i>
+                      </button>
+                    {% else %}
+                      <button data-toggle="tooltip" class="pull-right" id="fav_post" data-placement="right" title="Favourite This Story">
+                        <span>Favourite</span><i style="color: red;font-size: 24px;margin-left: 5px" class="fa fa-heart-o"></i>
+                      </button>
+                    {% endif %}
+                  </div>  
+                {% endif %}
+              {% endif %}
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+          <div class="sidebar-area">
+
+            {% if blog.awards %}
+              <div class="sidebar-section latest-post-area hide-mobile">
+                <h4 class="title"><b class="light-color"><i class="fa fa-list" style="font-size: 20px;"></i> Achievements</b></h4>
+                <ul class="list-group">
+                  <marquee direction="up" style="max-height: 350px;" onmouseover="this.stop()" onmouseout="this.start()" scrollamount="3">
+                    {% for award in blog.awards %}
+                      <li class="list-group-item active" 
+                        style="background-color: #f7f7f7; border-color: #f7f7f7; color: black; margin-top: 2px">
+                        <i class="fa fa-angle-double-right"></i> {{ award|safe }}
+                      </li>
+                    {% endfor %}
+                  </marquee>
+                </ul>
+              </div>    
+              <div class="sidebar-section latest-post-area show-mobile">
+                <h4 class="title"><b class="light-color"><i class="fa fa-list" style="font-size: 20px;"></i> Achievements</b></h4>
+                <ul class="list-group">
+                  {% for award in blog.awards %}
+                    <li class="list-group-item active" 
+                      style="background-color: #f7f7f7; border-color: #f7f7f7; color: black; margin-top: 2px">
+                      <i class="fa fa-angle-double-right"></i> {{ award|safe }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>     
+            {% endif %}
+
+            {% if blog.facts %}
+              <div class="sidebar-section latest-post-area hide-mobile">
+                <h4 class="title"><b class="light-color"><i class="fa fa-list" style="font-size: 20px;"></i> Interesting Facts</b></h4>
+                <ul class="list-group">
+                  <marquee direction="up" style="max-height: 350px;" onmouseover="this.stop()" onmouseout="this.start()" scrollamount="3">
+                    {% for fact in blog.facts %}
+                      <li class="list-group-item active" 
+                        style="background-color: #f7f7f7; border-color: #f7f7f7; color: black; margin-top: 2px">
+                        <i class="fa fa-angle-double-right"></i> {{ fact|safe }}
+                      </li>
+                    {% endfor %}
+                  </marquee>
+                </ul>
+              </div> 
+              <div class="sidebar-section latest-post-area show-mobile">
+                <h4 class="title"><b class="light-color"><i class="fa fa-list" style="font-size: 20px;"></i> Interesting Facts</b></h4>
+                <ul class="list-group">
+                  {% for fact in blog.facts %}
+                    <li class="list-group-item active" 
+                      style="background-color: #f7f7f7; border-color: #f7f7f7; color: black; margin-top: 2px">
+                      <i class="fa fa-angle-double-right"></i> {{ fact|safe }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div> 
+            {% endif %}
+
+            <div class="hide-mobile">
+              <div class="sidebar-section latest-post-area">
+                <h4 class="title"><b class="light-color">Top Stories</b></h4>
+                {% for blog in top_blogs %} 
+                  <div class="latest-post" style="padding: 5px; background-color: #f6f6f6; border-radius: 5px;">
+                    <div class="l-post-image">
+                      <img src="{{blog.image_url}}" alt="Blog Image" style="width: 90px; height: 60px; border-radius: 5px;">
+                      <h6 class="date"><em>{{ blog.created_at.strftime('%b %Y') }}</em></h6>
+                    </div>
+                    <div class="post-info">
+                      <h5><a href="/post/{{blog.url}}">{{ blog.title }}</a></h5>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <div class="sidebar-section newsletter-area" style="background-color: #10161f">
+                <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+                <form id="subscribe-form" onsubmit="return false;">
+                  <input class="email-input" name="email" id="subscribe-email" type="email" placeholder="Your email here" required>
+                  <button  onclick="subscribeForm()" class="primary-btn">SUBSCRIBE</button>
+                </form>
+              </div>
+
+              <div class="sidebar-section tags-area">
+                <h4 class="title"><b class="light-color">Top Categories</b></h4>
+                <ul class="tags" style="padding-left: 0;list-style-type: none;">
+                  {% for category in categories[:10] %}
+                    <li><a class="primary-category-btn"  href="/category_list/{{category.name}}">{{category.name}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            
+
+          </div>
+        </div>  
+        <div class="col-md-8 col-sm-12">
+          {% if current_user.is_authenticated %}
+            <div class="leave-comment-area">
+              <h4 class="title"><b class="light-color">Leave a comment</b></h4>
+              <div class="leave-comment">
+                <form method="post">
+                  <div class="row" style="">
+                    <div class="col-sm-12">
+                      <textarea class="message-input" id="comment" name="comment" rows="2" placeholder="Enter Your Comment Here..."></textarea>
+                    </div>
+                    <div class="col-sm-12">
+                      <button class="primary-btn" type="submit" id="add-comment-btn">Add Comment</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% else %}
+            <div style="margin-top: 20px" class="leave-comment single-post-login-section">
+              <h4 class="title" style="margin-bottom: 20px"><b class="light-color">Please Login to Comment</b></h4>
+              <a class="primary-btn" href="/login"><b>Go to Login</b></a>
+            </div>
+          {% endif %}
+            
+          {% if comments %}
+              <div class="comments-area">
+                <h4 class="title"><b class="light-color"> Comments</b></h4>
+                {% for comment in comments %}
+                  <div class="comment">
+                    <div class="author-image"><img src="https://prismpop.com/assets/user-dummy-7fe51b80b24a2ad73772ca0e3842dc638fe7d3c988c49c639f9a91db8e170f1d.png" alt="Autohr Image"></div>
+                    <div class="comment-info">
+                      <div>
+                        <h5><b class="light-color">{{ comment.user.full_name }}</b></h5>
+                        {% if current_user.username == comment.user.email %}
+                          <ul class="right-area social-icons pull-right" style="margin-right: 20px">
+                            <a id="button{{comment.id}}" onclick="edit_comment('{{ comment.id }}')">
+                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <a style="display: none;"  id="save{{comment.id}}" onclick="save_comment('{{ comment.id }}')">
+                              <i class="fa fa-save" aria-hidden="true"></i>
+                            </a>
+                          </ul>
+                        {% elif current_user.role_name == "admin" or current_user.username == comment.user.email %}
+                          <ul class="right-area social-icons pull-right">
+                            <a onclick="delete_comment('{{ comment.id }}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                          </ul>  
+                        {% endif %}
+                        <h6 class="date"><em>{{ comment.created_at.strftime('%d/%m/%Y') }}</em></h6>
+                      </div>
+                      <p>{{comment.comment}}</p>
+                      <textarea style="display: none; width: 100%;padding: 3px" id="input{{comment.id}}" class="message-input" name="comment" rows="2"> 
+                          {{comment.comment}}
+                      </textarea>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+        </div>
+
+        <div class="show-mobile col-sm-12 col-sm-12">
+          <div class="sidebar-section latest-post-area">
+            <h4 class="title"><b class="light-color">Top Stories</b></h4>
+            {% for blog in top_blogs %} 
+              <div class="latest-post" style="padding: 5px; background-color: #f6f6f6; border-radius: 5px;">
+                <div class="l-post-image">
+                  <img src="{{blog.image_url}}" alt="Blog Image" style="width: 90px; height: 60px; border-radius: 5px;">
+                  <h6 class="date"><em>{{ blog.created_at.strftime('%b %Y') }}</em></h6>
+                </div>
+                <div class="post-info">
+                  <h5><a href="/post/{{blog.url}}">{{ blog.title }}</a></h5>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="sidebar-section tags-area">
+            <h4 class="title"><b class="light-color">Top Categories</b></h4>
+            <ul class="tags" style="padding-left: 0;list-style-type: none;">
+              {% for category in categories[:10] %}
+                <li><a class="primary-category-btn"  href="/category_list/{{category.name}}">{{category.name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>        
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript" src="/static/js/subscribe.js"></script>
+  <script type="text/javascript">
+
+    function delete_comment(i){
+      if (confirm('Are you sure you want to delete the comment?')){
+        $.post("/delete_comment",
+        {
+          pid: i
+        }, function(data, status){
+          alert(data);
+          window.location.reload();
+        });
+      }
+    }
+
+    function edit_comment(i){
+      $("#default"+i).hide();
+      $("#button"+i).hide();
+      $("#save"+i).show();
+      $("#input"+i).show();
+    }
+
+    function save_comment(i){
+      $.post("/edit_comment",
+      {
+        comment: $("#input"+i).val(),
+        cid: i
+      }, function(data, status){
+        $("#default"+i).show();
+        $("#button"+i).show();
+        $("#save"+i).hide();
+        $("#input"+i).hide();
+        $("#default"+i).html("Comment:"+$("#input"+i).val());
+        alert("Comment Edited Successfully");
+        window.location.reload();
+      });
+    }
+
+
+    $(document).ready(function(){
+
+      $("#add-comment-btn").click(function(){
+        let add_comment_btn =  $("#add-comment-btn");
+        if ($("#comment").val().trim().length > 0) {
+          add_comment_btn.attr('disabled','disabled');
+          $.post("/add_comment",
+            {
+              blog_id: "{{blog.id}}",
+              comment: $("#comment").val()
+            },(data, status) => {
+              window.location.reload();
+            });
+        } else{
+          alert("Empty message can not be posted");
+          return false;
+        }
+      });
+
+      $("#fav_post").click(function(){
+        $.post("/add_fav",
+        {
+          blog_id: "{{blog.id}}"
+        },
+        function(data, status){
+          // alert(data);
+          window.location.reload();
+        });
+      });
+
+      $("#remove_fav").click(function(){
+        $.post("/remove_fav",
+        {
+            blog_id: "{{blog.id}}"
+        },
+        function(data, status){
+          // alert(data);
+          window.location.reload();
+        });
+      });
+      
+
+    });
+    $(window).scroll(function () { 
+      if ($(window).scrollTop() > $('body').height() / 2) {
+      $.post("/add_view",
+        {
+          blog_id: "{{blog.id}}",
+        }, function(data, status){ });
+        $(window).off('scroll');
+      } 
+    });
+  
+  </script>
+{% endblock %}

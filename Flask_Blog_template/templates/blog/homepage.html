@@ -1,0 +1,327 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+	{{ super() }}
+	<style type="text/css">
+		.featured-blog{
+			background-color: #f9f9f9; 
+			padding: 0px 5px 10px 5px; 
+			border-radius: 5px;
+		}
+
+		.featured-blog img{
+			border-top-right-radius: 0px;
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+			height: 300px;
+	    object-fit: cover;
+	    object-position: center;
+		}
+
+		.featured-blog h3{
+			line-height: 1.3;
+		}
+
+		.icons{
+			margin: 0px !important;
+		}
+
+		.featured-blog .date{
+			margin-bottom: 10px;
+		}
+
+		.homepage-carousel{
+			display: flex;
+			flex-direction: row;
+			padding: 50px;
+		}
+
+		.carousel-item img{
+			width: 90px;
+			height: 90px;
+			margin: auto;
+		}
+
+		.carousel-item p{
+			padding: 0px 100px;
+			font-size: 20px;
+			color: #e1e1e1;
+		}
+
+		.testimonials-section{
+			background-image: linear-gradient(#6898cf, #86acd8);
+		}
+
+		.content-box{
+			box-shadow: 0 21px 50px rgba(0, 0, 0, 0.08);
+	    border: none;
+	    margin-bottom: 30px;
+		}
+
+		.content-box .card-body{
+			display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+		}
+
+		.content-box .card-body h3 {
+			margin: 20px 0px;
+		}
+
+		.content-box .card-body p{
+			text-align: justify;
+			color: #555;
+		}
+	</style>
+{% endblock %}	
+
+{% block blog_content %}
+  <!--Top Slider-->
+  <div class="main-slider">
+		<div id="slider">
+			{% for slide in slider %}
+			<div class="ls-slide" data-ls="bgsize:cover; bgposition:50% 50%; duration:4000; transition2d:104; kenburnsscale:1.00;">
+				<img src="{{slide.image}}" class="ls-bg" />
+				{% if slide.title %}
+					<div class="slider-content ls-l" style="top:75%; left:48%;" data-ls="offsetyin:100%; offsetxout:-50%; durationin:800; delayin:100; durationout:400; parallaxlevel:0;">
+						<h3 class="title">
+							{% if slide.url %}<a href="{{slide.url}}">{{slide.title}}</a>{% else %}{{slide.title}}{% endif %}
+						</h3>
+					</div>
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<!--Top Slider-->
+
+	<section class="section blog-area">
+		<h2 class="text-center" style="margin: 30px 0px">Featured Posts</h2>
+		<div class="container">
+				{% for blog in featured %}
+        	{% if loop.index%2 == 1 %}<div class="row" style="margin-top: 15px">{% endif %}
+						<div class="col-lg-6 col-md-12">
+							<div class="blog-posts">
+								<div class="single-post featured-blog" style="">
+									<div class="image-wrapper"><img class="featured-img"src="{{blog.image_url}}" alt="Blog Image"></div>
+									<div style="padding: 1.25rem;">
+										<div class="icons">
+											<div class="left-area">
+												<p class="date">
+													<em>{{ blog.created_at.strftime('%d/%m/%Y') }}</em>
+												</p>
+											</div>
+											<ul class="right-area social-icons">
+												<p style="margin-right: 5px"><span style="color: #777;font-size: 14px;margin-right: 4px">by</span><span><a href="/author/{{ blog.author.url }}" style="color: #ef6b2a;font-size: 16px">{{ blog.author.name }}</a></span></p>
+											</ul>
+										</div>
+										<h3 class="title" style="margin: 0px; padding: 0px;">
+											<a href="/post/{{blog.url}}">
+												<b class="light-color">{{ blog.title }} </b>
+											</a>
+										</h3>
+										<p style="margin-top: 5px">{{blog.summary[0:200]}}</p>
+										<div class="icons">
+											<ul class="right-area social-icons">
+												<p style="color: #ef6b2a;margin-top: 15px;">
+													<b>{{blog.views}} views</b>
+												</p>
+											</ul>
+										</div>
+									</div>	
+								</div>
+							</div>
+						</div>
+					{% if loop.index%2 == 0 %}</div>{% endif %}
+				{% endfor %}
+				</div>	
+
+			</div>
+		</div>
+	</section>
+
+	<section style="background-color: #f7f7fa;padding: 50px 30px 50px 30px">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 how-img">
+	         <img src="https://www.drilers.com/wp-content/uploads/2017/04/Drilers-min.png" class="img-fluid" alt=""/>
+	      </div>
+	      <div class="col-md-6" style="padding: 50px 30px">
+	        <h4>SHARE YOUR STORY</h4>
+	        <p class="subheading">You can share your motivational stories with us and we’ll ensure that your story is promoted and appreciated through our platform as we are one of the renowned promoters and supporters that are always in a hunt for hidden talent.</p>
+	        <h5 style="color:#ef6b2a; margin-top: 30px">Join the team and share your story!</h5>
+	      </div>
+			</div>
+		</div>	
+	</section>			
+
+	<section style="padding: 50px 30px 50px 30px">
+		<div class="container">
+			<div class="row">
+	    	<div class="col-xs-12 col-sm-6 col-lg-4">
+					<div class="box">							
+						<div class="icon">
+							<div class="image"><i class="fa fa-user"></i></div>
+							<div class="info">
+								<h3 class="title">Who We Are</h3>
+								<p>
+									We are a bunch of endowed people seeking for talent among people who have eventually set a benchmark in their respected fields and are in search of global highlight. We ensure that anyone who is doing something great for the nation and society must get equivalent respect and fame as they deserve.
+								</p>
+								<div class="more">
+									<a href="/about_us" title="Title Link">
+										Read More <i class="fa fa-thumbs-o-up"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="space"></div>
+					</div> 
+				</div>
+			
+		    <div class="col-xs-12 col-sm-6 col-lg-4">
+					<div class="box">							
+						<div class="icon">
+							<div class="image"><i class="fa fa-flag"></i></div>
+							<div class="info">
+								<h3 class="title">Get Support</h3>
+		    					<p>
+									We are available to serve you with the finest services that are tough to match, and eventually leave no stone unturned in satisfying our valuable guests. If you are interested in sharing your story, or you wish to share a story of people who have done something extraordinary, feel free to reach us! You just need to shoot a mail on our registered mail and we’ll get back to you at the earliest.
+								</p>
+								<div class="more">
+									<a href="/contact_us" title="Title Link">
+										Read More <i class="fa fa-thumbs-o-up"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="space"></div>
+					</div> 
+				</div>
+			
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+					<div class="box">							
+						<div class="icon">
+							<div class="image"><i class="fa fa-pencil"></i></div>
+							<div class="info">
+								<h3 class="title">Want To Write</h3>
+		    					<p>
+									Drilers feel an immense pleasure to invite the people who wish to write their story in their own way and we will publish that story on our website. You can visit the “Want to Write” section and start writing your success story that will ultimately inspire millions of people.
+								</p>
+								<div class="more">
+									<a href="/write_with_us" title="Title Link">
+										 Read More <i class="fa fa-thumbs-o-up"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="space"></div>
+					</div> 
+				</div>	
+					    
+			</div>
+		</div>
+	</section>
+
+	<section style="background-color: #f1f1f1;padding: 50px 0px 25px 0px">
+		<div class="container">
+			<div style="align-items: center;">
+				<h2 class="title text-center light-color" style="color: #333">What Clients To Say</h2>
+			</div>
+			<div class="row" style="margin-top: 0px">
+				<div class="home-card-carousel col-md-8 mt-5 mb-5" style="margin-top: 0px!important">
+				  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="100000">
+				    <div class="w-100 carousel-inner" role="listbox">
+				      <div class="carousel-item active">
+				        <div class="carousel-caption">
+				          <div class="row">
+				            <div class="col-sm-3">
+				              <img src="https://prismpop.com/assets/user-dummy-7fe51b80b24a2ad73772ca0e3842dc638fe7d3c988c49c639f9a91db8e170f1d.png" alt="" class="rounded-circle img-fluid"/>
+				            </div>
+				            <div class="col-sm-9">
+				              <h3>Mohit</h3>
+				              Drilers is one of its kind websites that are featuring common people that have achieved great success in their respected field. I really appreciate your work.
+				              <small class="smallest mute">- Some Name</small>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+				      <div class="carousel-item">
+				        <div class="carousel-caption">
+				          <div class="row">
+				            <div class="col-sm-3">
+				              <img src="https://prismpop.com/assets/user-dummy-7fe51b80b24a2ad73772ca0e3842dc638fe7d3c988c49c639f9a91db8e170f1d.png" alt="" class="rounded-circle img-fluid">
+				            </div>
+				            <div class="col-sm-9">
+				              <h3>Rajan</h3>
+				              It’s a great platform where I have seen real stories are so inspirational that it really made my day. Keep it up!
+				              <small class="smallest mute">- Some Name</small>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+				      <div class="carousel-item">
+				        <div class="carousel-caption">
+				          <div class="row">
+				            <div class="col-sm-3">
+				              <img src="https://prismpop.com/assets/user-dummy-7fe51b80b24a2ad73772ca0e3842dc638fe7d3c988c49c639f9a91db8e170f1d.png" alt="" class="rounded-circle img-fluid">
+				            </div>
+				            <div class="col-sm-9">
+				              <h3>Gunjan</h3>
+				              That is really fascinating, You are a very professional blogger. I have joined your feed and sit up for seeking extra of your magnificent post.
+				              <small class="smallest mute">- Some Name</small>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+				    </div>
+				    <div class="float-right navi">
+				    <a class="" href="#carouselExampleControls" role="button" data-slide="prev">
+				      <span class="carousel-control-prev-icon ico" aria-hidden="true"></span>
+				      <span class="sr-only">Previous</span>
+				    </a>
+				    <a class="" href="#carouselExampleControls" role="button" data-slide="next">
+				      <span class="carousel-control-next-icon ico" aria-hidden="true"></span>
+				      <span class="sr-only">Next</span>
+				    </a>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</section>	
+
+	<section class="section blog-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="blog-posts" style="padding: 30px 30px 30px 50px; background-color: #f7f7fa;border-radius: 6px;">
+						<h2 class="title" style="color: 191919;margin-bottom: 30px ">Share Referrals</h2>
+						<p>Drilers is a unique inspiring platform that prioritizes highlighting the talent of our country and we welcome referrals and ensure that every story gets sufficient space on our platform to motivate millions of people around the world. You just need to get in touch with us and share the details of a person who have achieved great success and we’ll invoke the desired efforts in drilling out the necessary information to shape it into a motivational story.</p>
+						<a class="primary-btn" style="margin-top:30px" href="/contact_us">Contact Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>	
+
+	<section style="background-color: #f7f7fa;padding: 50px 30px 50px 30px;margin: 50px 0px">
+		<div class="container">
+			<div class="row">
+	      <div class="col-md-6" style="padding: 50px 30px">
+	        <h4>Who We Are</h4>
+	        <p class="subheading">Check out this video to get a better idea about Drilers</p>
+	        <a class="primary-btn" style="margin-top:30px" href="/register">Join our team</a>
+	      </div>
+	      <div class="col-md-6 how-img">
+	         <iframe class="scale-with-grid" width="500" height="300" src="https://www.youtube.com/embed/3-S5Zb9pqBA?wmode=opaque" allowfullscreen=""></iframe>
+	      </div>
+			</div>
+		</div>	
+	</section>	
+
+
+		
+{% endblock %}
+

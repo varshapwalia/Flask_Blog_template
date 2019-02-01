@@ -1,0 +1,81 @@
+{% extends "layouts/admin.html" %}
+
+{% block admin_content %}
+  <section class="blog-area" style="margin-top: 50px">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+            
+              <div class="single-post">
+                <div>
+                  <h3 class="title"><b class="light-color">Add Image</b></h3>
+                  <div style="margin: 40px 0px">
+                    <form action = "/add_image" method = "POST" enctype="multipart/form-data">
+                      <input style="background-color: #f7f7fa" type="file" name="pic" accept="image/*" required>
+                      <button type="submit" class="primary-btn">Upload Image</button>
+                    </form>  
+                  </div>
+                </div>
+                <div>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image Preview</th>
+                        <th scope="col">Image Url</th>
+                        <th scope="col">Copy Url</th>
+                        <th scope="col">Delete Image</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for image in data %}
+                        <tr scope="row">
+                          <td>{{ loop.index }}</td>
+                          <td><img style="width: 100px; height: 100px;" src="{{image.image}}"></td>
+                          <td> {{ image.image }}</td>
+                          <td> <button class="primary-btn" onclick="myFunction('{{image.image}}')">Copy text</button></td>
+                          <td> <button class="secondary-btn" onclick="delete_image('{{image.id}}')">Delete Image</button></td>
+                        </tr>
+                      {% endfor %}  
+                    </tbody>  
+                  </table>  
+                </div>
+                {{ pagination.links }}
+              </div>  
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>      
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+    <script type="text/javascript">
+    	function myFunction(image) {
+    	  let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(image).select();
+        document.execCommand("copy");
+        $temp.remove();
+  	  }
+      function delete_image(i){
+        var result = confirm("Want to delete?");
+        if (result) {
+            //Logic to delete the item
+
+          $.post("/delete_image",
+          {
+            iid: i
+          },
+          function(data, status){
+          alert(data);
+          window.location.reload();
+          });
+        }
+      }
+    </script>
+{% endblock %}

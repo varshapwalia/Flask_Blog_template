@@ -1,0 +1,156 @@
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+      <title>{% block title %}{{title|default}}{% endblock title %}</title>
+
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Chrome, Firefox OS and Opera -->
+      <meta name="theme-color" content="#f9f9f9">
+      <!--og tags -->
+      <meta name="twitter:card" content="summary">
+      
+      
+      <meta name="msapplication-navbutton-color" content="#ffffff">
+      <!-- iOS Safari -->
+      <meta name="mobile-web-app-capable" content="yes">
+
+      <!--icons-->
+      <link rel="apple-touch-icon" sizes="57x57" href="public/apple-icon-57x57.png">
+      <link rel="apple-touch-icon" sizes="60x60" href="public/apple-icon-60x60.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="public/apple-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="76x76" href="public/apple-icon-76x76.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="public/apple-icon-114x114.png">
+      <link rel="apple-touch-icon" sizes="120x120" href="public/apple-icon-120x120.png">
+      <link rel="apple-touch-icon" sizes="144x144" href="public/apple-icon-144x144.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="public/apple-icon-152x152.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="public/apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192"  href="public/android-icon-192x192.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="96x96" href="public/favicon-96x96.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png">
+
+
+      {%- block metas %}
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="public/ms-icon-144x144.png">
+      {%- endblock metas %}
+
+      <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+      {%- block styles %}
+        <!-- Place all the CSS -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+        <link href="/static/css/bootstrap.css" rel="stylesheet" >
+        <link href="/static/css/ionicons.css" rel="stylesheet" >
+        <link href="/static/css/layerslider.css" rel="stylesheet" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style type="text/css">
+          .unactive {
+            display: none;
+          }
+          .primary-btn{
+            font-size: 1em;
+            padding: 0.6rem .95rem;
+            border-radius: 30px;
+            letter-spacing: 2px;
+            border: 1px solid #fa781b;
+            color: #fa781b;
+          }
+
+          .primary-btn:hover{
+            font-size: 1em;
+            padding: .6rem .95rem;
+            background: #fa781b;
+            border-radius: 30px;
+            letter-spacing: 2px;
+            border: 1px solid #fa781b;
+            color: #fff;
+          }
+
+          .secondary-btn{
+            font-size: 1em;
+            padding: 0.6rem .95rem;
+            border-radius: 30px;
+            letter-spacing: 2px;
+            border: 1px solid #fa781b;
+            background-color: #fa781b;
+            color: #fff;
+          }
+
+          .secondary-btn:hover{
+            font-size: 1em;
+            background: #e16c18;
+            border: 1px solid #e16c18;
+            border-radius: 30px;
+            letter-spacing: 2px;
+            color: #fff;
+            padding: .6rem .95rem;
+          }
+
+          a, button:focus{
+            outline: none;
+            border: none;
+          }
+        </style>
+      {%- endblock styles %}
+    {%- endblock head %}
+  </head>
+
+  <body{% block body_attribs %}{% endblock body_attribs %}>
+  {% block body -%}
+    {% block navbar -%}
+      <!-- Place Navigation Bar -->
+      {% include "navbar.html" %}
+    {%- endblock navbar %}
+
+    <div id="body_content">
+      {% block content -%}
+        <!-- Place Content here -->
+      {%- endblock content %}
+    </div>
+
+    {% block footer -%}
+      {% include "footer.html" %}
+    {%- endblock %}
+  
+  <script src="/static/js/jquery-3.1.1.min.js"></script>
+  <script src="/static/js/tether.min.js"></script>
+  <script src="/static/js/popper.min.js"></script>
+  <script src="/static/js/flickity.pkgd.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/layerslider.js"></script>
+  <script src="/static/js/scripts.js"></script>
+
+  <script type="text/javascript">
+    $('#menu-nav-icon').click(()=>{
+      let body_content = $('#body_content');
+      let mobile_menu = $('#mobile-navbar');
+      let menu_nav_icon = $('#menu-nav-icon');
+      if (body_content.hasClass('unactive')) {
+        body_content.removeClass('unactive');
+        mobile_menu.addClass('unactive');
+        menu_nav_icon.addClass('fa-bars');
+        menu_nav_icon.removeClass('fa-window-close');
+      } else{
+        body_content.addClass('unactive');
+        mobile_menu.removeClass('unactive');
+        menu_nav_icon.addClass('fa-window-close');
+        menu_nav_icon.removeClass('fa-bars');
+      } 
+    });
+  </script>
+
+  {% block scripts -%}
+    <!-- Place all the scripts here -->
+  {%- endblock scripts %}
+
+  {%- endblock body %}
+  </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}

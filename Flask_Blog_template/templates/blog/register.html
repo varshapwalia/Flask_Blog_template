@@ -1,0 +1,143 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/css/bootstrap-select.css" />
+  <style type="text/css">
+		.cancel-btn{
+			background-color: #ef6b2a;
+			color: #fff;
+		}
+		.cancel-btn:hover{
+			background-color: #ed5b12
+		}
+
+    .dropdown-menu .inner .show li{
+      width: 100%;
+      background: #eee;
+    }
+
+    .dropdown-toggle{
+      background-color: #f8f9fa !important;
+      border-color: #f8f9fa !important;
+    }
+
+    .filter-option-inner-inner{
+      color: #000;
+    }
+	</style>
+{% endblock %}
+
+{% block blog_content %}
+	<section class="blog-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+						<div class="leave-comment-area">
+							<h4 class="title"><b class="light-color">Register Here</b></h4>
+							<div class="leave-comment">
+								<form id="register_form" onsubmit="return false;">
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<input class="name-input" type="text" id="name" placeholder="Your Name" name="name" required>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<input class="email-input" type="email" id="email" placeholder="Your Email Address" name="email" required>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<input class="subject-input" type="password" minlength="8" id="password" placeholder="Your Password" name="password" required>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<input class="subject-input" type="password" minlength="8" id="confirm_password" placeholder="Confirm Password" name="confirm_password" required>
+										</div>
+                    <div class="col-sm-12 col-md-12">
+                      <input class="subject-input" type="text" id="mobile" maxlength="10" placeholder="Your Mobile Number" name="mobile" required>
+                    </div>
+										<div class="col-sm-12 col-md-12" style="margin: 10px 0px 10px">
+                      <label style="font-size: 18px" for="categories">Select Category</label>
+                      <select id="categories" name="categories" class="form-control selectpicker" multiple data-live-search="true" required>
+                        {% for category in categories %}
+                          <option value="{{category.name}}">
+                            {{category.name}}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-sm-12" style="display: flex; margin: 10px 0px;">
+                      <input style="flex: 1;zoom: 1.3;margin-top: 3px" type="checkbox" aria-label="Checkbox for following text input" required>
+                      <p style="flex: 9;font-size: 14px;margin-left: -15px;">By checking this, you accept our <a href="/terms-and-conditions">Terms and Conditions</a></p>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 10px">
+											<button type="submit" id="signup-btn" class="primary-btn">SignUp</button>
+                      <div class="pull-right" style="margin-top: 12px">
+                        <p style="display: inline-block;">Have An Account?</p>
+                        <a style="display: inline-block;font-size: 18px;color: #e37c4d" href="/login">Login Here</a>
+                      </div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>			
+		</div>
+	</section>		
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="/static/js/bootstrap-select.min.js"></script>
+  <script>
+    $(document).ready(()=>{
+      $("#categories").on("changed.bs.select",function(){
+        let values = $(this).val();
+        let all_values = values.map(function(tag, index){
+          return `<span>${tag}</span>`
+        })
+        $('#categories-tags').html(all_values);
+      });
+
+      $('#register_form').submit(()=>{
+        let mobileErrorBlock = $('.register-phone-error');
+        let name = $('#name').val();
+        let email = $('#email').val();
+        let confirm_password = $('#confirm_password').val();
+        let password = $('#password').val();
+        let categories = $('#categories').val();
+        let mobile = $('#mobile').val();
+        let signup_btn = $('#signup-btn');
+        if (confirm_password !== password) {
+          alert("New Password and Confirm Password must be same");
+          return false;
+        } else if (mobile.length != 10 || isNaN(mobile)) {
+          alert("Please enter a valid mobile number");
+          return false;
+        } else if (!name || !email || !categories || !password || !confirm_password){
+          alert("Please fill all the details.");
+          return false;
+        } else {
+          signup_btn.attr('disabled','disabled');
+          $.post('/register', {
+            name: name,
+            email: email,
+            confirm_password: confirm_password,
+            password: password,
+            categories: categories,
+            mobile: mobile
+          }, (data, status) => {
+            signup_btn.removeAttr('disabled');
+            if (data=="Success"){
+              alert("Successfully Registered. Please login to continue.")
+              window.location = "/login";
+            } else {
+              alert(data);
+            }
+          });
+        }
+        return false;
+      })
+    })
+  </script>
+{% endblock %}

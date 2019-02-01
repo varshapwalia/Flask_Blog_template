@@ -1,0 +1,207 @@
+<style type="text/css">
+
+  @media (min-width: 767px){
+    .search-modal-email-input{ 
+      width: 75%; 
+      margin: 15px 0; 
+      border: 0; 
+      padding: 10px; 
+      background: #fff; 
+      border-bottom: 1px solid #ef6b2a;
+    }
+
+    .modal-header{
+      border-bottom: none;
+    }
+
+    .dropdown:hover>.nabar-dropdown-menu {
+      display: block;
+      top: 70%
+    }
+
+    /*.dropdown>.dropdown-toggle:active {
+      pointer-events: none;
+    }*/
+
+  }
+
+  .active-current{
+    background: #eee;
+    color: #FA781B;
+  }
+
+  @media (max-width:768px){
+    .hide-desktop-header{
+      display: none !important;
+    }
+
+    .mobile-menu{
+      display: block;
+      padding: 23px 20px 22px 25px;
+    }
+
+    .nav-ham-i{
+      margin-top: -13px;
+    }
+
+    .active-menu{
+      display: block;
+    }
+
+    .mobile-nav-ul{
+      display: flex;
+      margin-top: 20%;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh
+    }
+
+    .mobile-nav-ul li{
+      padding: 15px 5px 15px 5px;
+    }
+
+    .mobile-nav-ul li a{
+      color: #000;
+      font-size: 34px
+    }
+  }
+
+</style>
+
+<header class="mobile-header-full">
+  <div class="bottom-area fixed-top header-nav-desktop hide-desktop-header">
+    <div class="nav-logo">
+      <a href="/"><img src="https://www.drilers.com/wp-content/uploads/2017/04/final-logo.png" class="nav-logo-img"></a>
+    </div>
+    <ul class="main-menu visible-on-click desktop-main-navbar" id="main-menu">
+       <li><a href="/story_list">ARTICLES AND STORIES</a></li>
+       <li><a href="/contact_us">CONTACT US</a></li>
+       <li><a href="/about_us">ABOUT US</a></li>
+       <li><a href="/write_with_us">WRITE WITH US</a></li>
+       {% if current_user.role_name == "user" %}
+          <li class="drop-down" data-pathname="/fav_blogs"><a href="/fav_blogs">USER</a>
+             <ul class="drop-down-menu">
+                <li><a href="/fav_blogs">FAVOURITE STORIES</a></li>
+                <li><a href="/comments/{{current_user.userid}}">MY COMMENTS</a></li>
+                <li><a href="/change_settings/{{current_user.userid}}">CHANGE SETTINGS</a></li>
+                <li><a href="/logout">LOGOUT</a></li>
+             </ul>
+          </li>
+        {% else %}
+          {% if current_user.is_authenticated %}
+            {% if current_user.role_name == "admin" %}
+              <li><a href="/admin-panel">ADMIN PANEL</a></li>
+            {% elif current_user.role_name == "editor" %}
+              <li><a href="/editor-panel">EDITOR PANEL</a></li>
+            {% endif %}
+          {% else %}
+            <li><a href="/login">LOGIN</a></li>
+          {% endif %}
+       {% endif %} 
+      <li>
+        <button data-toggle="modal" data-target="#myModal"><i class="fa fa-search"></i></button>
+      </li> 
+      <li>
+        <div class="dropdown">
+        <button onmouseover="showShare()" onmouseout="hideShare()" id="share-btn-navbar"><i class="fa fa-share-alt"></i></button>
+          <div class="dropdown-menu nabar-dropdown-menu" style="padding: 0px" aria-labelledby="dropdownMenuButton">
+            <a style="border-color:#3b5998;color: #3b5998" class="dropdown-item" target="_blank" href="https://www.facebook.com/drilers/">
+              <i class="fa fa-facebook"></i> FACEBOOK
+            </a>
+            <a class="dropdown-item" style="border-color: #dd4b39;color: #dd4b39" target="_blank" href="https://plus.google.com/b/108795547540024039508/?pageId=108795547540024039508">
+              <i class="fa fa-google-plus"> </i> GOOGLE PLUS
+            </a>
+            <a style="color: #55acee;border-color: #55acee" class="dropdown-item" href="https://twitter.com/drilers">
+              <i class="fa fa-twitter"></i> TWITTER
+            </a>
+            <a class="dropdown-item" style="border-color: #cb2027;color: #cb2027" target="_blank" href="https://www.pinterest.com/drilers/">
+              <i class="fa fa-pinterest"> </i> PINTEREST
+            </a>
+            <a class="dropdown-item" style="border-color: #007bb5;color: #007bb5" target="_blank" href="https://www.linkedin.com/company/drilers">
+              <i class="fa fa-linkedin"> </i> LINKEDIN
+            </a>
+            <a class="dropdown-item" style="border-color: #ff0000;color: #ff0000" target="_blank" href="https://www.youtube.com/channel/UCLJY8kHiEjLH7Sj17AupEdA">
+              <i class="fa fa-youtube"> </i> YOUTUBE
+            </a>
+            <a style="color: #e95950" class="dropdown-item"  target="_blank" href="https://www.instagram.com/drilersforall/">
+              <i class="fa fa-instagram" ></i> INSTAGRAM
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+     
+
+  <div class="navigation mobile-menu">
+    <div class="col-sm-4 col-md-4 text-center">
+      <a href="/"><img src="https://www.drilers.com/wp-content/uploads/2017/04/final-logo.png" class="nav-logo-img" style="width: 35%"></a>
+    </div>
+    <div class="col-sm-4 col-md-4 text-center nav-ham-i" style="margin-top: 10px;">
+      <div class="menu-nav-icon" data-nav-menu="main-menu"><i class="fa fa-bars" id="menu-nav-icon"></i></div>
+    </div>
+  </div>
+  <div class="unactive" id="mobile-navbar">
+    <ul class="mobile-nav-ul container">
+      <li><a href="/story_list">STORIES</a></li>
+      <li><a href="/contact_us">CONTACT US</a></li>
+      <li><a href="/about_us">ABOUT US</a></li>
+      {% if current_user.role_name == "user" %}
+        <li><a href="/write_with_us">WRITE WITH US</a></li>
+        <li><a href="/fav_blogs">FAVOURITE STORIES</a></li>
+        <li><a href="/comments/{{current_user.userid}}">MY COMMENTS</a></li>
+        <li><a href="/change_settings/{{current_user.userid}}">CHANGE SETTINGS</a></li>
+        <li><a href="/logout">LOGOUT</a></li>
+      {% else %}  
+        {% if current_user.is_authenticated %}
+          {% if current_user.role_name == "admin" %}
+            <li><a href="/admin-panel">ADMIN PANEL</a></li>
+          {% elif current_user.role_name == "editor" %}
+            <li><a href="/editor-panel">EDITOR PANEL</a></li>
+          {% endif %}
+        {% else %}
+            <li><a href="/login">LOGIN</a></li>
+            <li><a href="/register">SIGNUP</a></li>
+        {% endif %}
+      {% endif %} 
+    </ul>
+  </div>
+</header>
+
+
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="display: flex;">
+        <form style="flex: 9" id="nav-search-form" action="/search" method = "POST">
+          <input class="src-input search-modal-email-input" type="text" placeholder="Search Tags / Categories" name="search" autofocus>
+          <button class="primary-btn" style="padding: 10px;" type="submit">Search</button>
+        </form>  
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+  let currentTabPath = window.location.pathname;
+  let liItems = document.getElementsByClassName('desktop-main-navbar')[0].children;
+  for(let i = 0; i < liItems.length; i++){
+    if(currentTabPath === liItems[i].firstElementChild.pathname){
+      liItems[i].classList.add("active-current");
+    } else{
+        if(liItems[i].classList.contains("active-current")){
+          liItems[i].classList.remove("active-current");
+        }
+      }
+  }
+</script>
+
+
+
+
+
+

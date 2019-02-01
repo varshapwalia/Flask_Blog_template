@@ -1,0 +1,96 @@
+{% extends "layouts/admin.html" %}
+
+{% block admin_content %}
+  <section class="blog-area" style="margin-top: 50px">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+              <div class="single-post">
+                <div>
+                  <h3 style="float: left;" class="title"><b class="light-color">Users List</b></h3>
+                  <div style="float: right;">
+                    <input type="text" class="search-input" name="q" placeholder="Name / Email / Mobile" id="search_query">
+                    <button class="search-btn" onclick="search()" data-value="reject">Search</button>
+                    <ul class="dropdown-menu" id="user-search-dropdown" aria-labelledby="dropdownMenu1">
+                    </ul>
+                  </div>
+                </div>
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Category Selected</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Mobile</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for user in data %}
+                      <tr scope="row">
+                        <td>{{ loop.index }}</td>
+                        <td> {{ user.full_name }} </td>
+                        <td> {{ user.userrole.name }} </td>
+                        <td> {% for category in user.category %}{{ category.name }}, {%endfor%} </td>
+                        <td> {{ user.email }} </td>
+                        <td> {{ user.mobile }} </td>
+                        {% if user.block %}
+                          <td> <a class="secondary-btn" href="/unblock_user/{{ user.id }}">Unblock User</a> </td>
+                        {% elif not user.block %}
+                          <td> <a class="primary-btn" href="/block_user/{{ user.id }}">Block User</a> </td>
+                        {% endif %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>  
+                </table>  
+                {{ pagination.links }}
+              </div>  
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section> 
+{% endblock %}   
+
+{% block scripts %}
+  {{ super() }}
+    <script type="text/javascript">
+      let search_text = '{% if query.q %}{{ query.q }}{% else %}{% endif %}'; // blank, any text
+
+      function set_defaults(){
+        document.getElementById('search_query').value = search_text;
+      }
+
+      set_defaults();
+
+      function update_query(){
+        location.href = "/users?";
+      }
+
+      let typingTimer; //timer identifier
+      let doneTypingInterval = 500;  //time in ms (5 seconds)
+
+      //on keyup, start the countdown
+      $('#search_query').keyup(function(){
+        let query = $('#search_query').val();
+        clearTimeout(typingTimer);
+        if (query.length > 4) {
+            typingTimer = setTimeout(search, doneTypingInterval);
+        } else if(query.length === 0){
+          $('#user-search-dropdown').css('display', 'none');
+        }
+      });
+
+      function search(){
+        let query = $('#search_query').val();
+        location.href = "/users?q=" +query;
+      }
+
+    </script>
+{% endblock %}

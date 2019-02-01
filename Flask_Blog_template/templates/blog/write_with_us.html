@@ -1,0 +1,88 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+	{{ super() }}
+	  <style type="text/css">
+		  .cancel-btn{
+				background-color: #ef6b2a;
+				color: #fff;
+			}
+			.cancel-btn:hover{
+				background-color: #ed5b12
+			}
+	  </style>
+{% endblock %}
+
+{% block blog_content %}
+	<section class="blog-area">
+		<div class="container">
+			<div class="row">
+        {% if current_user.is_authenticated %}
+  				<div class="col-lg-8 col-md-12">
+
+  					<div class="blog-posts">
+  						<div class="leave-comment-area">
+  								<h4 class="title"><b class="light-color">Write Your Story to Us</b></h4>
+  								<div class="leave-comment">
+  									<form action="/write_with_us" id="write_with_us" method="POST">
+  										<div class="row">
+  											<div class="col-sm-12">
+  												<input class="name-input" type="text" placeholder="Title" id="title" name="title" required>
+  											</div>
+  											<div class="col-sm-12">
+  												<textarea class="message-input" rows="2" placeholder="Write Your Story to Us" name="body" id="body-field" required></textarea>
+  											</div>
+  											<div class="col-sm-12">
+  												<button type="submit" id="send-story-btn" class="primary-btn"><b>Send Story</b></button>
+  												<a href="#" onclick="window.location.reload();" class="secondary-btn"><b>Cancel</b></a>
+  											</div>
+  										</div>
+  									</form>		
+  								</div>
+  							
+  							</div>
+  						</div>		
+  					</div>
+          {% else %}
+
+            <div class="col-lg-12 col-md-12">
+              <div class="blog-posts">
+                <div class="leave-comment write-post-login-section">
+                  <h4 class="title" style="margin-bottom: 20px"><b class="light-color">Please Login first to fill up this form.</b></h4>
+                  <a class="primary-btn" href="/login"><b>Go to Login</b></a>
+                </div>
+              </div>
+            </div>
+          {% endif %}   
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(()=>{
+      $('#write_with_us').submit(()=>{
+        let send_story_btn = $("#send-story-btn");
+        let title = $('#title').val();
+        let body = $('#body-field').val();
+        if (!title || !body){
+          alert("All Fields are required fields.");
+        } else {
+          send_story_btn.attr('disabled','disabled');
+          $.post($(this).attr('action'), {
+            title: title,
+            body: body
+          }, function(data, status){
+            alert(data);
+            window.location.reload();
+          });
+        }
+        return false;
+      });
+    });
+  </script>
+{% endblock scripts %}

@@ -1,0 +1,95 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .cancel-btn{
+      background-color: #ef6b2a;
+      color: #fff;
+    }
+    .cancel-btn:hover{
+      background-color: #ed5b12
+    }
+  </style>
+{% endblock %}
+
+{% block admin_content %}
+  <section class="blog-area">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-8 col-md-12">
+          <div class="blog-posts">
+            
+              <div class="leave-comment-area">
+                <h4 class="title"><b class="light-color">Add author</b></h4>
+                <div class="leave-comment">
+                  <form action = "/add_author" method = "POST" id="add-author-form">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <input class="name-input" type="text" id="name" placeholder="author's Name" name="name" required>
+                      </div>
+                      <div class="col-sm-12">
+                        <input class="name-input" type="text" id="description" placeholder="About author" name="description" required>
+                      </div>
+                      <div class="col-sm-12">
+                        <input class="name-input" type="text" id="url" placeholder="url of author" name="url" required>
+                      </div>
+                      <div class="col-sm-12" style="margin-top: 20px">
+                        <button type="submit" class="primary-btn"><b>Add author </b></button>
+                        <a href="/" class="secondary-btn" >Cancel</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">About author</th>
+                      <th scope="col">URL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for author in authors %}
+                      <tr scope="row">
+                        <td>{{ loop.index }}</td>
+                        <td>{{author.name}}</td>
+                        <td> {{ author.description }}</td>
+                        <td><a class="primary-btn"  href="/author/{{ author.url }}" target="_Blank"> {{ author.url }} </a></td>
+                      </tr>
+                    {% endfor %}  
+                  </tbody>  
+                </table>  
+              </div>    
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>          
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+
+    $(document).ready(()=>{
+      $('#add-author-form').submit(()=>{
+        $.post($(this).attr('action'), {
+          name: $('#name').val().trim(),
+          description: $('#description').val().trim(),
+          url: $('#url').val().trim(),
+        }, function(data, status){
+          alert(data);
+          window.location.reload();
+        });
+        return false;
+      });
+    });
+  </script>
+{% endblock scripts %}  

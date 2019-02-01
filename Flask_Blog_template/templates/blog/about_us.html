@@ -1,0 +1,66 @@
+{% extends "layouts/blog.html" %}
+
+{% block blog_content %}
+	<section class="blog-area">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+
+						<div class="single-post">
+							<h3 class="title"><b class="light-color">Who we Are?</b></h3>
+							<p class="desc">As the name suggests, DRILERS means to drill out the hidden talent among people who are working hard to make the entire world a better place for living and eventually contributing to the society. We are a bunch of enthusiastic people who are passionate about exploring some great dexterity among people from around the country by the means of images, videos, and for readers in form of exciting stories. Our vision is not just for drilling down the information regarding a specific skill-set in a person, but we also give our best to motivate, promote, and appreciate these talented people. We are supporters of those who are contributing to making our country proud with their work or talent. DRILERS is a great platform that is capable of delivering adequate information regarding the people with extraordinary skills and who have achieved great success but are seeking for a global attention. We offer numerous ways to emphasize a person who has achieved great accomplishment by promoting them on our website. Feel free to share your inspirational stories with us, or you can convey the world about a particular person whom you think is specialandreach us through our“Get Our Support feature”. Apart from this, if you love to write or wish to create your story by yourself, then quickly check out the “Want to Write” feature, and you’ll be able to write about your success journey.</p>
+						</div>
+
+						<div class="single-post">
+							<h3 class="title"><b class="light-color">How DRILERS Works?</b></h3>
+							<p class="desc">Drilers is a platform that solely consists of all the information about talent as well as information about the people who are contributing to making our country proud by their hardwork and struggles. Drilers isn’t a platform that provides information about particular celebrities, or people who have already reached to the pinnacles of success and fame. This platform is for all which includes common people who have an abundance of talent and seeking for a highlight. We bring out the information and spread this information through our different networks so that each citizen of the country should get an update regarding our country’s paramount talent. We are not restricted to only a single field; we will try our best to explore each and every field including sports, business, science, and social activities.</p>
+						</div>	
+						
+						<div class="single-post">
+							<h3 class="title"><b class="light-color">Why DRILERS?</b></h3>
+							<p class="desc">We at Drilers entirely focus on our efforts to bring out the hidden talent among people and their struggles and eventually transform it in the form of exciting stories with the use of appropriate images and videos. Apart from this, we offer an entirely new way of writing your own story, one can easily contribute by sending their stories and achievements and we’ll leave no stone unturned in highlighting your panache. Furthermore, one can share the stories of people around them and we’ll make sure that their story gets a sufficient room on our website. Get in touch with us by calling our helpline number, or simply click on ‘Get Support’, and we’ll contact you at the earliest.</p>
+						</div>	
+
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-12">
+					<div class="sidebar-area">
+
+						<div class="sidebar-section latest-post-area">
+              <h4 class="title"><b class="light-color">Top Stories</b></h4>
+              {% for blog in top_blogs[:5] %} 
+                <div class="latest-post" style="padding: 5px; background-color: #f6f6f6; border-radius: 5px;">
+                  <div class="l-post-image">
+                    <img src="{{blog.image_url}}" alt="Blog Image" style="width: 90px; height: 60px; border-radius: 5px;">
+                    <h6 class="date"><em>{{ blog.created_at.strftime('%b %Y') }}</em></h6>
+                  </div>
+                  <div class="post-info">
+                    <h5><a href="/post/{{blog.url}}">{{ blog.title }}</a></h5>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+					  <div class="sidebar-section newsletter-area" style="background-color: #10161f">
+              <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+              <form id="subscribe-form" onsubmit="return false;">
+                <input class="email-input" name="email" id="subscribe-email" type="email" placeholder="Your email here" required>
+                <button  onclick="subscribeForm()" class="primary-btn">SUBSCRIBE</button>
+              </form>
+            </div>
+
+					</div>
+				</div>	
+
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script type="text/javascript" src="/static/js/subscribe.js"></script>
+{% endblock scripts %}

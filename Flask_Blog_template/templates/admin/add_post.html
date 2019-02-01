@@ -1,0 +1,157 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .achievement_tags{
+      padding: 3px 15px 3px 2px;
+      background-color: #ef6b2a;
+      color: #fff;
+    }
+
+    .author-select{
+      border: none;
+      width: 100%;
+      height: 50px;
+      padding: 3px 10px;
+    }
+
+    .author-select > option{
+      padding: 10px;
+    }
+
+    .dropdown-menu .inner .show li{
+      width: 100%;
+      background: #eee;
+    }
+  </style>
+{% endblock %}
+
+{% block admin_content %}
+  <section class="blog-area">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <div class="blog-posts">
+            <div class="leave-comment-area">
+
+              <h4 class="title"><b class="light-color">Add a Post</b></h4>
+              <div class="leave-comment">
+                <div class="row">
+                  <div class="col-sm-9">
+                    <input class="name-input" style="font-size: 32px" type="text" id="title" placeholder="Title" name="title" required autofocus onkeyup="createPostSlug()" value="{% if old_data %}{{old_data.title}}{% endif %}" maxlength="150">
+                  </div>
+                  <div class="col-sm-9">
+                    <input class="name-input" type="text" id="blog_url"  placeholder="Your Post URL" name="blog_url" value="{% if old_data %}{{old_data.url}}{% endif %}" >
+                  </div>
+                  <div class="col-sm-9">
+                    <select id="author" class="author-select" onchange="selectAuthor(this)" required >
+                      {% for author in authors %}
+                        <option hidden="true" value="" selected="true" disabled >Select Author</option>
+                        <option value="{{author.id}}">{{ author.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-sm-9">
+                    <input class="email-input" type="text" id="image"  placeholder="Featured Picture Url" name="blog_image" value="{% if old_data %}{{old_data.image_url}}{% endif %}">
+                  </div>
+                  <div class="col-sm-9">
+                    <textarea class="message-input" minlength="200" rows="6" placeholder="Post Summary" name="summary" id="summary" required >{% if old_data %}{{old_data.summary}}{% endif %}</textarea>
+                  </div>
+                  <div class="col-sm-9" style="margin: 20px 0px 40px">
+                    <select id="categories" name='categories' class="form-control selectpicker" multiple data-live-search="true" required>
+                      {% for category in categories %}
+                        <option value="{{category.name}}" {% if old_data %}{% if category in old_data.category %}selected{% endif %}{% endif %}>
+                          {{category.name}}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-sm-9">
+                    <textarea id="summernote" class="form-control" name="body" placeholder="Write Your Post" required>{% if old_data %}{{old_data.body}}{% endif %}</textarea>
+                  </div>
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <p style="margin-bottom: 5px;">Copy code &amp;#44; for comma</p>
+                    <input type="text" class="form-control"  data-role="tagsinput" name="tags" id="tags" placeholder="Add tags" value="{% if old_data %}{% for tag in old_data.tags %}{{tag}},{% endfor %}{% endif %}" />
+                  </div>
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <p style="margin-bottom: 5px;">Copy code &amp;#44; for comma</p>
+                    <input type="text" class="form-control" data-role="tagsinput" name="awards" id="awards" placeholder="Add Achievements" value="{% if old_data %}{% for award in old_data.awards %}{{award}},{% endfor %}{% endif %}" />
+                  </div>  
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <input type="text" class="form-control" data-role="tagsinput" name="facts" id="facts" placeholder="Interesting Facts" value="{% if old_data %}{% for fact in old_data.facts %}{{fact}},{% endfor %}{% endif %}" />
+                  </div>  
+                  <div class="col-sm-9" style="display: none;">
+                    <input type="hidden" value="{% if old_data %}{{old_data.id}}{% endif %}" name="post_id" id="post_id" />
+                  </div>  
+                  <div class="col-sm-9" style="margin-top: 20px">
+                    <button class="primary-btn" onclick="finish_post()"><b>Finish</b></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+
+    <script>
+      $(document).ready(()=>{
+        $('#summernote').summernote({
+          height: 300               // set editor height
+        });
+        let tags_property = { defaultKeys:[13],  trimValue: true, cancelConfirmKeysOnEmpty: true };
+        $('#tags').tagsinput(tags_property);
+        $('#awards').tagsinput(tags_property);
+        $('#facts').tagsinput(tags_property);
+
+        $('.filter-option-inner-inner').html("Select Categories");
+
+        $("#categories").on("changed.bs.select",function(){
+          let values = $(this).val();
+          let all_values = values.map(function(tag, index){
+            return `<span>${tag}</span>`
+          })
+          $('#categories-tags').html(all_values);
+        });
+      });
+
+      function createPostSlug(){
+        let slug = $('#title').val().replace(/[^\sA-Za-z0-9]/gi, '').toLowerCase().trim().replace(/ /g, '-');
+        $('#blog_url').val(slug);
+      }
+
+      function finish_post(){
+        $.post("/add_post",{
+          title: $('#title').val().trim(),
+          blog_url: $('#blog_url').val().trim(),
+          blog_image: $('#image').val(),
+          summary: $('#summary').val().trim(),
+          categories: $('#categories').val(),
+          author: $('#author').val(),
+          body: $('#summernote').val(),
+          tags: $('#tags').tagsinput('items'),
+          awards: $('#awards').tagsinput('items'),
+          facts: $('#facts').tagsinput('items'),
+          post_id: $('#post_id').val()
+        },
+        function(data, status){
+          alert(data);
+          if (data == "Success"){
+            window.location = "/admin_post_list";
+          }
+        });
+      }
+
+      function selectAuthor(event) {
+        
+      }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "layouts/blog.html" %}
+
+{% block blog_content %}
+	<section class="blog-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+						<div class="single-post">
+							<h3 class="title"><b class="light-color">Contact Us</b></h3>
+						</div>	
+						<span class="response-message-box text-center unactive" style="text-align: center; ;background: #e9e9e9; color: #777; font-size: 24px; padding: 5px 10px;"></span>
+						<div class="leave-comment-area">
+							<div class="leave-comment">
+								<form action="/contact_us" id="contact_us_form" method="POST">
+									<div class="row">
+										<div class="col-sm-6">
+											<input class="name-input" type="text" name="name" placeholder="Name" id="name" 
+											{% if user and user.full_name %} readonly {% endif %}
+											value="{% if user %}{{user.full_name}}{% endif %}" required>
+										</div>
+										<div class="col-sm-6">
+											<input class="email-input" type="text" placeholder="Mobile" name="mobile" 
+											{% if user and user.mobile %} readonly {% endif %}
+											value="{% if user and user.mobile %}{{user.mobile}}{% endif %}" id="mobile" maxlength="10" required>
+										</div>
+										<div class="col-sm-12">
+											<input class="email-input" type="email" placeholder="Email" name="email" 
+											{% if user and user.email %} readonly {% endif %}
+											value="{% if user %}{{user.email}}{% endif %}" id="email" required>
+										</div>
+										<div class="col-sm-12">
+											<input class="subject-input" type="text" placeholder="Title" id="title" name="title" required>
+										</div>
+										<div class="col-sm-12">
+											<textarea class="message-input" rows="2" placeholder="Query/Details" name="details" id="details" required></textarea>
+										</div>
+										<div class="col-sm-12">
+											<button type="submit" class="primary-btn" id="submit-contact-btn">Submit</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12">
+					<div class="sidebar-area">
+						<div class="sidebar-section about-author center-text" style="padding-top: 20px">
+							<h4 class="author-name"><b class="light-color">Who We Are</b></h4>
+							<p>Drilers is a unique inspiring platform that prioritizes highlighting the talent of our country and we welcome referrals and ensure that every story gets sufficient space on our platform to motivate millions of people around the world.</p>
+							<a class="read-more-link" href="https://youtu.be/3-S5Zb9pqBA" target="_blank"><b>KNOW MORE</b></a>
+						</div>
+
+						<div class="sidebar-section newsletter-area" style="background-color: #10161f">
+              <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+              <form id="subscribe-form" onsubmit="return false;">
+                <input class="email-input" name="email" id="subscribe-email" type="email" placeholder="Your email here" required>
+                <button  onclick="subscribeForm()" class="primary-btn">SUBSCRIBE</button>
+              </form>
+            </div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>				
+						
+{% endblock blog_content %}
+
+{% block scripts %}
+	{{ super() }}
+  <script type="text/javascript" src="/static/js/subscribe.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(()=>{
+			$('#contact_us_form').submit(()=>{
+				let mobile_val = $('#mobile').val();
+				let submit_contact_btn = $("#submit-contact-btn")
+				if (mobile_val.length != 10 || isNaN(mobile_val)) {
+					alert("Please enter a valid mobile number");
+					return false;
+				}
+				submit_contact_btn.attr('disabled','disabled');
+				$.post($(this).attr('action'), {
+					mobile: $('#mobile').val().trim(),
+					name: $('#name').val().trim(),
+					email: $('#email').val().trim(),
+					title: $('#title').val().trim(),
+					details: $('#details').val().trim()
+				}, function(data, status){
+            submit_contact_btn.removeAttr('disabled');
+					// let responseMessageBox = $('.response-message-box');
+					// if (responseMessageBox.hasClass('unactive')) {
+					// 	responseMessageBox.toggleClass('unactive').text(data);
+					// 	setTimeout(()=>{
+					// 		responseMessageBox.toggleClass('unactive').text("");
+					// 	},3000);
+					// }
+          alert(data);
+          window.location.reload();
+        });
+				return false;
+			});
+		});
+	</script>
+{% endblock scripts %}	

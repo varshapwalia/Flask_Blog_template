@@ -1,0 +1,69 @@
+{% extends "layouts/blog.html" %}
+
+{% block blog_content %}
+	<section class="blog-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+						<div class="leave-comment-area">
+							<h4 class="title"><b class="light-color">LogIn into Drilers</b></h4>
+							<div class="leave-comment">
+
+								<form action="/login" method="POST" id="login-form">
+									<div class="row">
+										<div class="col-sm-12">
+											<input type="email" class="email-input" id="email" placeholder="Enter Email" name="email" required>
+										</div>
+										<div class="col-sm-12">
+											<input type="password" class="email-input" id="password" placeholder="Enter Password" name="password" required>
+										</div>
+										<div class="col-sm-12">
+											<button type="submit" id="login-btn" class="primary-btn">Login</button>
+											<a href="/forgot_password" class="secondary-btn">Forgot Password</a>
+											<div class="pull-right" style="margin-top: 25px">
+                        <p style="display: inline-block;">Don't have An Account?</p>
+                        <a style="display: inline-block;font-size: 18px;color: #e37c4d" href="/register">SignUp Here</a>
+                      </div>
+										</div>
+									</div>		
+								</form>
+							</div>
+						</div>	
+					</div>	
+				</div>	
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+		$(document).ready(()=>{
+			$('#login-form').submit(()=>{
+				let email = $('#email').val();
+				let password = $('#password').val();
+				let login_btn = $("#login-btn")
+				if (!email || !password) {
+					alert("Fill up both email and password");
+					return false;
+				} else {
+					login_btn.attr('disabled','disabled');
+					$.post($(this).attr('action'), {
+						email: email,
+						password: password
+					}, (data, status) => {
+            login_btn.removeAttr('disabled');
+						if (data=="Success"){
+							window.location = "/";
+						} else {
+							alert(data);
+						}
+	        });
+				}
+				return false;
+			});
+		});
+	</script>
+{% endblock scripts %}	

@@ -1,0 +1,86 @@
+{% extends "layouts/admin.html" %}
+
+{% block head %}
+	{{ super() }}
+	<style type="text/css">
+		.cancel-btn{
+			background-color: #ef6b2a;
+			color: #fff;
+		}
+		.cancel-btn:hover{
+			background-color: #ed5b12
+		}
+	</style>
+{% endblock %}
+
+{% block admin_content %}
+	<section class="blog-area" style="margin-top: 50px">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 col-md-12">
+					<div class="blog-posts">
+						
+							<div class="leave-comment-area">
+								<h4 class="title"><b class="light-color">Add Editor</b></h4>
+								<div class="leave-comment">
+									<form action="/add_editor" method="POST">
+										<div class="row">
+											<div class="col-sm-12 col-md-9">
+												<input class="email-input" type="email" id="email" placeholder="Email" name="email" onkeyup="this.value = this.value.toLowerCase();" required>
+											</div>
+											<div class="col-sm-12 col-md-9">
+												<input class="name-input" type="text" id="name" placeholder="Editor's Name" name="name" required>
+											</div>
+
+											<div class="col-sm-12 col-md-9">
+												<input class="email-input" id="mobile" type="text" placeholder="Mobile Number" name="mobile" maxlength="10" required>
+											</div>
+											<div class="col-sm-12 col-md-9">
+												<input class="password-input" type="password" placeholder="Password" id="pass" name="pass" required>
+											</div>
+											<div class="col-sm-12 col-md-9">
+												<input class="password-input" type="password" placeholder="Confirm Password" id="confirm_pass" name="confirm_pass" required>
+											</div>
+											<div class="col-sm-12 col-md-12" style="margin: 20px 0px 40px">
+												<label style="font-size: 18px" for="categories">Select Category</label>
+		                    <select id="categories" name="categories" class="form-control selectpicker" multiple data-live-search="true" required>
+		                      {% for category in data %}
+		                        <option value="{{category.name}}">
+		                          {{category.name}}
+		                        </option>
+		                      {% endfor %}
+		                    </select>
+		                  </div>
+											<div class="col-sm-12 col-md-12" style="margin-top: 20px">
+												<button type="submit" class="primary-btn"><b>Add Editor</b></button>
+												<a href="/admin-panel" class="secondary-btn" >Cancel</a>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>		
+						
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>					
+{% endblock admin_content %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+  	$(document).ready(()=>{
+  		$("#categories").on("changed.bs.select",function(){
+        let values = $(this).val();
+        let all_values = values.map(function(tag, index){
+          return `<span>${tag}</span>`
+        })
+        $('#categories-tags').html(all_values);
+      });
+  	})	
+  </script>
+
+{% endblock scripts %}  

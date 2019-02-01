@@ -1,0 +1,160 @@
+{% extends "layouts/blog.html" %}
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .featured-blog{
+      background-color: #f9f9f9; 
+      padding: 0px 5px 10px 5px; 
+      border-radius: 5px;
+    }
+
+    .featured-blog img{
+      border-top-right-radius: 0px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      height: 300px;
+      object-fit: cover;
+      object-position: top !important;
+    }
+
+    .featured-blog h3{
+      line-height: 1.3;
+    }
+
+    .icons{
+      margin: 0px !important;
+    }
+
+    .featured-blog .date{
+      margin-bottom: 10px;
+    }
+
+    .dropdown:hover>.dropdown-menu {
+      display: block;
+    }
+
+    .dropdown>.dropdown-toggle:active {
+      pointer-events: none;
+    }
+
+    .category-btn{
+      padding: 2px 5px !important;
+    }
+
+  </style>
+{% endblock head %}  
+    
+
+{% block blog_content %}
+  <section class="section blog-area">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-8 col-md-12">
+          <div class="blog-posts">
+            {% for blog in data %}
+              <div class="single-post featured-blog" style="background-color: #f9f9f9; padding: 5px;">
+                <div class="image-wrapper"><img style="border-radius: 5px;" src="{{blog.image_url}}" alt="Blog Image"></div>
+                <div style="padding: 1.25rem;">
+                  <div class="icons">
+                    <div class="left-area">
+                      <p class="date">
+                        <em>{{ blog.created_at.strftime('%d/%m/%Y') }}</em>
+                      </p>
+                    </div>
+                    <ul class="right-area social-icons">
+                      <p style="margin-right: 5px"><span style="color: #777;font-size: 14px;margin-right: 4px">by</span><span><a href="/author/{{ blog.author.url }}" style="color: #ef6b2a;font-size: 16px">{{ blog.author.name }}</a></span></p>
+                    </ul>
+                  </div>
+                  <h3 class="title" style="margin: 0px; padding: 0px;">
+                    <a href="/post/{{blog.url}}">
+                      <b class="light-color">{{ blog.title }}</b>
+                    </a>
+                  </h3>
+                  <p style="margin-top: 5px">{{blog.summary[0:200]}}</p>
+                  <div style="margin-top: 20px">
+                    <div class="pull-left">
+                      <div class="dropdown">
+                       <button style="font-size:16px;color: #ef6b2a;">Share <i class="fa fa-share-alt"></i></button>
+                        <div class="dropdown-menu" style="padding: 0px" aria-labelledby="dropdownMenuButton">
+                          <a style="background:#385596;color: #FFF" class="dropdown-item" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.drilers.com/post/{{blog.url}}">
+                            <i class="fa fa-facebook"></i> Facebook
+                          </a>
+                          <a style="background: #5689C4;color: #FFF" class="dropdown-item" href="https://twitter.com/home?status=https://www.drilers.com/post/{{blog.url}}" target="_blank">
+                            <i class="fa fa-twitter"></i> Twitter
+                          </a>
+                          <a style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%) ;color: #FFF" class="dropdown-item" href="https://twitter.com/home?status=https://www.drilers.com/post/{{blog.url}}" target="_blank">
+                            <i class="fa fa-instagram"></i> Instagram
+                          </a>
+                        </div>
+                      </div>
+                    </div>  
+                    <div class="pull-right">
+                      <p style="color: #ef6b2a;">
+                        <b>{{blog.views}} views</b>
+                      </p>
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            {% endfor %}
+            {% if not data %}
+            <div style="display: flex;flex-direction: column;align-items: center;margin-top: 20%;">
+              <h5>Search results not found. Try with another terms.</h5>
+              <a href="/">Go to Home Page</a>
+            </div>
+            {% endif %}
+          </div>
+          {{ pagination.links }}
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+          <div class="sidebar-area">
+
+            <div class="sidebar-section latest-post-area">
+              <h4 class="title"><b class="light-color">Top Stories</b></h4>
+              {% for blog in top_blogs %} 
+                <div class="latest-post" style="padding: 5px; background-color: #f6f6f6; border-radius: 5px;">
+                  <div class="l-post-image">
+                    <img src="{{blog.image_url}}" alt="Blog Image" style="width: 90px; height: 60px; border-radius: 5px;">
+                    <h6 class="date"><em>{{ blog.created_at.strftime('%b %Y') }}</em></h6>
+                  </div>
+                  <div class="post-info">
+                    <h5><a href="/post/{{blog.url}}">{{ blog.title }}</a></h5>
+                  </div>
+                </div>
+              {% endfor %}  
+            </div>
+
+            <div class="sidebar-section newsletter-area" style="background-color: #10161f">
+              <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+              <form id="subscribe-form" onsubmit="return false;">
+                <input class="email-input" name="email" id="subscribe-email" type="email" placeholder="Your email here" required>
+                <button  onclick="subscribeForm()" class="primary-btn">SUBSCRIBE</button>
+              </form>
+              </div>
+            </div>
+
+            <div class="sidebar-section tags-area">
+            <h4 class="title"><b class="light-color">Top Categories</b></h4>
+            <ul class="tags" style="padding-left: 0;list-style-type: none;">
+              {% for category in categories[:10] %}
+                <li><a class="primary-category-btn" href="/category_list/{{category.name}}">{{category.name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          </div>
+        </div>  
+
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script type="text/javascript" src="/static/js/subscribe.js"></script>
+{% endblock scripts %}

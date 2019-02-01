@@ -1,0 +1,169 @@
+{% extends "layouts/base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
+  <link rel="stylesheet" href="/static/css/bootstrap-select.css" />
+  <link href="/static/css/admin.css" rel="stylesheet">
+
+  <style type="text/css">
+    .nav{
+      display: flex;
+      flex-direction: column;
+      margin: 3vh 10px 0px 10px;
+      background: #eee;
+    }
+
+    .admin-nav{
+      height: 97vh;
+      overflow: scroll;
+    }
+
+    .admin-content{
+      height: 97vh;
+      overflow: scroll;
+    }
+
+    .nav-item{
+      padding: 5px 1px 5px 1px;
+    }
+
+    .nav-item:hover{
+      background: #d6d6d6;
+    }
+
+    .bootstrap-tagsinput input{
+      border: none;
+      box-shadow: none;
+      outline: none;
+      background-color: transparent;
+      padding: 0 6px;
+      margin: 0;
+      width: auto;
+      max-width: inherit;
+    }
+
+    .dropdown-menu .inner .show li{
+      width: 100%;
+      background: #eee;
+    }
+
+    .dropdown-toggle{
+      background-color: #f8f9fa;
+      border-color: #f8f9fa;
+    }
+
+    .active-current-nav{
+      background: #d6d6d6;
+      color: #FA781B;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div style="margin-top: 65px; display: flex;">
+    <div class="admin-nav" style="flex: 2">
+      {% if current_user.role_name == "admin" %}
+      <ul class="nav desktop-admin-sidebar">
+        <li class="nav-item">
+          <a class="nav-link" href="/write_with_us_list">Write With Us LIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_author">ADD AUTHOR</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_post_list">LIST/FEATURE STORY</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users">USERLIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_editor">ADD EDITOR ACCOUNT</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_post">ADD POST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_image">ADD IMAGE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_category">ADD CATEGORY</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_slider">ADD SLIDER</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact_list">CONTACT US LIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/subscriber_list">SUBSCRIBER LIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/fav_blogs">FAVOURITE BLOGS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/all_comments">COMMENTS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/change_settings/{{current_user.userid}}">SETTINGS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">LOGOUT</a>
+        </li>
+      </ul>
+      {% elif current_user.role_name == "editor" %}
+      <ul class="nav desktop-admin-sidebar">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_post_list">LIST/FEATURE STORY</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_post">ADD STORY</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_image">ADD IMAGE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_category">ADD CATEGORY</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/fav_blogs">FAVOURITE STORIES</a>
+        </li>
+        <li data-pathname class="nav-item">
+          <a class="nav-link" href="/all_comments">COMMENTS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/change_settings/{{current_user.userid}}">SETTINGS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">LOGOUT</a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+    <div class="admin-content" style="flex: 10;">
+      {% block admin_content -%}
+      {%- endblock admin_content %}
+    </div>
+  </div>
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% block scripts %}
+  <script src="/static/js/bootstrap-tagsinput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+  <script src="/static/js/bootstrap-select.min.js"></script>
+  <script type="text/javascript">
+    let currentNavPath = window.location.pathname;
+    let navLiItems = document.getElementsByClassName('desktop-admin-sidebar')[0].children;
+    for(let i = 0; i < navLiItems.length; i++){
+      if(currentNavPath === navLiItems[i].firstElementChild.pathname){
+        navLiItems[i].classList.add("active-current-nav");
+      } else if(navLiItems[i].classList.contains("active-current-nav")){
+        navLiItems[i].classList.remove("active-current-nav");
+      }
+    }
+  </script>
+{% endblock scripts %}

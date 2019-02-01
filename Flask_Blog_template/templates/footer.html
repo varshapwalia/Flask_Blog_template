@@ -1,0 +1,172 @@
+<footer class="page-footer font-small stylish-color-dark pt-4" style="background-image: linear-gradient(#10161f, #272d35);">
+
+    <div class="container text-center text-md-left">
+      <div class="row">
+
+        <div class="col-md-4 mx-auto">
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4">About Us</h5>
+          <p style="color: #fff">DRILERS means we drill down information about talent among people, also for those who are doing some special work for our world; in many exciting forms of images, videos, and for readers in form of exciting stories.</p>
+        </div>
+
+        <hr class="clearfix w-100 d-md-none">
+        <div class="col-md-2 mx-auto">
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Top Categories</h5>
+          <ul class="list-unstyled footer-links">
+            <li>
+              <a href="/category_list/5c160623199cfe5d530d44a4">Motivational Stories</a>
+            </li>
+            <li>
+              <a href="/category_list/5c0fd3fa96f7b0000feb5a56">Rising Women Stories</a>
+            </li>
+            <li>
+              <a  href="/category_list/5c16063e199cfe5d530d44a6">Truly Inspiring Stories</a>
+            </li>
+            <li>
+              <a  href="/category_list/5c160660199cfe5d530d44a7">Business Motivational Stories</a>
+            </li>
+            <li>
+              <a href="/category_list/5c16066f199cfe5d530d44a8">Sports Inspirational Stories</a>
+            </li>
+            <li>
+              <a href="/category_list/5c16067b199cfe5d530d44a9">Music Motivational Stories</a>
+            </li>
+            <li>
+              <a href="/category_list/5c160686199cfe5d530d44aa">Inspiring Stories</a>
+            </li>
+          </ul>
+        </div>
+
+        <hr class="clearfix w-100 d-md-none">
+        <div class="col-md-2 mx-auto">
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Short Links</h5>
+          <ul class="list-unstyled footer-links">
+            <li>
+              <a href="/about_us">About us</a>
+            </li>
+            <li>
+              <a href="/write_with_us">Write With Us</a>
+            </li>
+            <li>
+              <a href="/story_list">Recommend Story</a>
+            </li>
+            <li>
+              <a href="/contact_us">Get Support</a>
+            </li>
+            <li>
+              <a href="/disclaimer">Disclaimer</a>
+            </li>
+            <li>
+              <a href="/terms-and-conditions">Terms And Conditions</a>
+            </li>
+            <li>
+              <a href="/privacy-policy">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        <hr class="clearfix w-100 d-md-none">
+        <div class="col-md-4 mx-auto">
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Contact Information</h5>
+          <ul class="list-unstyled footer-links">
+            <li>
+              <h5 class="title"><b>Subscribe to our newsletter</b></h5>
+              <form style="margin-top: 15px" onsubmit="return false;">
+                <input class="email-input" style="border-radius: 25px;padding: 3px 5px;" id="footer-subscribe-email" type="email" name="email" placeholder="Your email here" required>
+                <button class="primary-btn" onclick="footerSubscribeForm()">Submit</button>
+              </form>
+              <div id="footer-subscribe-form-message"></div>
+            </li>
+            <li style="margin-top: 10px">
+              <h5 class="title"><b>Mail us at</b></h5>
+              <i class="fa fa-envelope"></i>
+              <a style="margin-top: 15px" href="mailto:support@drilers.com">support@drilers.com</a>
+            </li>
+          </ul>
+        </div>
+
+        <hr class="clearfix w-100 d-md-none">
+        <div class="col-md-2 mx-auto">
+          
+        </div>
+
+      </div>
+    </div>
+
+    <hr>
+    {% if current_user.is_authenticated == False %}
+        <ul class="list-unstyled list-inline text-center py-2">
+          <li class="list-inline-item">
+            <h5 class="mb-1">Register for free</h5>
+          </li>
+
+          <li class="list-inline-item">
+            <a href="/register" class="secondary-btn footer-sign-up">Sign up!</a>
+          </li>
+        </ul>
+      <hr>
+    {% endif %}  
+
+    <ul class="list-unstyled list-inline text-center">
+      <li class="list-inline-item">
+        <a class="btn-floating btn-fb mx-1" target="_blank" href="https://www.facebook.com/drilers/">
+          <i class="fa fa-facebook"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-tw mx-1" target="_blank" href="https://twitter.com/drilers">
+          <i class="fa fa-twitter"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-gplus mx-1" target="_blank" href="https://plus.google.com/b/108795547540024039508/?pageId=108795547540024039508">
+          <i class="fa fa-google-plus"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-li mx-1" target="_blank" href="https://www.linkedin.com/company/drilers">
+          <i class="fa fa-linkedin"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-dribbble mx-1" target="_blank" href="https://www.pinterest.com/drilers/">
+          <i class="fa fa-pinterest"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-dribbble mx-1" target="_blank" href="https://www.youtube.com/channel/UCLJY8kHiEjLH7Sj17AupEdA">
+          <i class="fa fa-youtube"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-dribbble mx-1" target="_blank" href="https://www.instagram.com/drilersforall/">
+          <i class="fa fa-instagram"> </i>
+        </a>
+      </li>
+    </ul>
+
+    <div class="footer-copyright text-center py-3">© 2018 Copyright:
+      <a href="/">Drilers.com</a>
+    </div>
+
+</footer>
+
+  <script type="text/javascript">
+    function validateEmail(email) {
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+
+    function footerSubscribeForm() {
+      let emailVal = $('#footer-subscribe-email').val();
+      if (emailVal && validateEmail(emailVal)) {
+        $.post("/subscribe",{
+          email: emailVal
+        },
+        function(data, status){
+          alert(data);
+          $('#footer-subscribe-email').val("");
+          // $('#footer-subscribe-form-message').text(data);
+        });
+      }
+    }
+  </script>
